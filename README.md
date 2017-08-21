@@ -1,20 +1,24 @@
-# Example
+# Example App For Phoenix Bug Report
 
-To start your Phoenix server:
+Demo project to replicate a possible bug with request header handling in Phoenix Framework.
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+https://github.com/phoenixframework/phoenix/issues/2452
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+## Issue
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+This app has a single route that outputs the value of an `authorization` request header.
 
-## Learn more
+The `PageControllerTest` shows how a single request with the header value works as expected. However, a second request using the same `conn` doesn't output the header value.
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+The Phoenix generators `phx.gen.json` and `phx.gen.html` setup controller tests that follow this pattern of making two requests using the same conn.
+
+## How To Replicate
+
+* Install dependencies with `mix deps.get`
+* Run the tests with `mix test`
+
+See the test source in `PageControllerTest`.
+
+## Notes
+
+I tried to set the request header for the second request and got a `Plug.Conn.AlreadySentError`.
